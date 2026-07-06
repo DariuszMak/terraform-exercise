@@ -159,3 +159,9 @@ files_rc.py
 
 # SQLite
 *.sqlite
+
+# Terraform
+.terraform*
+terraform.*
+main.tf
+test.txt
