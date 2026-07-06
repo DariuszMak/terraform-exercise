@@ -1,0 +1,96 @@
+###############################################################
+# CLEAN DOCKER SAFELY
+###############################################################
+
+docker system df ; 
+docker compose down -v --remove-orphans ; 
+docker stop $(docker ps -a -q) ; 
+docker rm -f $(docker ps -a -q) ; 
+docker system prune --volumes -a -f ; 
+docker volume rm -f $(docker volume ls -q) ; 
+docker system df ; 
+
+###############################################################
+# START LOCALSTACK (detached mode)
+###############################################################
+
+docker run -d `
+  -p 4566:4566 `
+  -p 4510-4559:4510-4559 `
+  --name localstack `
+  localstack/localstack
+
+Start-Sleep -Seconds 10
+
+###############################################################
+# SET AWS ENV (no aws configure needed)
+###############################################################
+
+$env:AWS_ACCESS_KEY_ID="test"
+$env:AWS_SECRET_ACCESS_KEY="test"
+$env:AWS_DEFAULT_REGION="eu-west-1"
+
+###############################################################
+# CREATE TERRAFORM FILE
+###############################################################
+
+@'
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+
+variable "endpoint" {
+  type = string
+}
+
+provider "aws" {
+  access_key = "test"
+  secret_key = "test"
+  region     = "eu-west-1"
+
+  s3_use_path_style           = true
+  skip_credentials_validation = true
+  skip_metadata_api_check     = true
+  skip_requesting_account_id  = true
+
+  endpoints {
+    s3 = var.endpoint
+  }
+}
+
+resource "aws_s3_bucket" "demo" {
+  bucket = "terraform-localstack-demo"
+}
+'@ | Set-Content main.tf -Encoding UTF8
+
+###############################################################
+# TERRAFORM EXECUTION
+###############################################################
+
+terraform init
+terraform apply -auto-approve -var="endpoint=http://localhost:4566"
+
+###############################################################
+# TEST S3
+###############################################################
+
+aws --endpoint-url=http://localhost:4566 s3 ls
+
+"Hello from LocalStack S3" | Set-Content test.txt
+
+aws --endpoint-url=http://localhost:4566 s3 cp test.txt s3://terraform-localstack-demo
+
+aws --endpoint-url=http://localhost:4566 s3 ls s3://terraform-localstack-demo
+
+###############################################################
+# OPEN IN BROWSER
+###############################################################
+
+Start-Process "http://localhost:4566/terraform-localstack-demo"
+
+###############################################################
