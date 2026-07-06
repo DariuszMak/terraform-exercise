@@ -10,6 +10,9 @@ docker system prune --volumes -a -f ;
 docker volume rm -f $(docker volume ls -q) ; 
 docker system df ; 
 
+git reset --hard HEAD ; 
+git clean -x -d -f ; 
+
 ###############################################################
 # START LOCALSTACK (detached mode)
 ###############################################################
