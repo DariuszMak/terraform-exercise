@@ -37,7 +37,7 @@ docker run -d `
   -p 4566:4566 `
   -p 4510-4559:4510-4559 `
   --name localstack `
-  localstack/localstack
+  localstack/localstack:community
 
 Write-Host "Waiting for LocalStack S3 to be ready..."
 $maxWait = 120
