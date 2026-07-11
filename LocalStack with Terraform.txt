@@ -39,7 +39,25 @@ docker run -d `
   --name localstack `
   localstack/localstack
 
-Start-Sleep -Seconds 10
+Write-Host "Waiting for LocalStack S3 to be ready..."
+$maxWait = 120
+$elapsed = 0
+while ($elapsed -lt $maxWait) {
+    try {
+        $health = Invoke-RestMethod -Uri "http://127.0.0.1:4566/_localstack/health" -Method Get -ErrorAction Stop
+        if ($health.services.s3 -eq "available") {
+            Write-Host "LocalStack S3 is ready!"
+            break
+        }
+    } catch {}
+    Start-Sleep -Seconds 2
+    $elapsed += 2
+    Write-Host "  ...waiting ($elapsed/$maxWait sec)"
+}
+if ($elapsed -ge $maxWait) {
+    Write-Error "LocalStack S3 failed to initialize within $maxWait seconds."
+    exit 1
+}
 
 ###############################################################
 # SET AWS ENV (no aws configure needed)
