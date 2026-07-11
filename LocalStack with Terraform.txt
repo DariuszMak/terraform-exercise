@@ -34,10 +34,10 @@ git clean -x -d -f ;
 ###############################################################
 
 docker run -d `
+  --name localstack `
   -p 4566:4566 `
   -p 4510-4559:4510-4559 `
-  --name localstack `
-  localstack/localstack:latest
+  localstack/localstack:3.8
 
 Write-Host "Waiting for LocalStack S3 to be ready..."
 $maxWait = 120
