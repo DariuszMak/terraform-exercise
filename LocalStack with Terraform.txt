@@ -33,7 +33,11 @@ git clean -x -d -f ;
 # START LOCALSTACK (detached mode)
 ###############################################################
 
-docker run -d -p 4566:4566 -p 4510-4559:4510-4559 --name localstack localstack/localstack:community
+docker run -d \
+  -p 4566:4566 \
+  -p 4510-4559:4510-4559 \
+  --name localstack \
+  localstack/localstack:latest
 
 Write-Host "Waiting for LocalStack S3 to be ready..."
 $maxWait = 120
