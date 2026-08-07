@@ -83,9 +83,6 @@ venv
 ENV
 Pipfile
 
-# UV
-uv.lock
-
 # SSL Certs
 .ca
 
@@ -159,9 +156,3 @@ files_rc.py
 
 # SQLite
 *.sqlite
-
-# Terraform
-.terraform*
-terraform.*
-main.tf
-test.txt
