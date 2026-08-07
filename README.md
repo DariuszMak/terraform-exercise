@@ -22,6 +22,12 @@
 - [Terraform](https://developer.hashicorp.com/terraform/install)
 - [AWS CLI](https://aws.amazon.com/cli/)
 
+### LocalStack + Terraform S3 demo
+
+```commandline
+task full-dev-localstack ; 
+```
+
 ### Fast Windows dev
 
 ```commandline
@@ -32,18 +38,6 @@ task full-dev-native ;
 
 ```commandline
 task generate-diagrams ; 
-```
-
-### LocalStack + Terraform S3 demo
-
-```commandline
-task localstack-terraform ; 
-```
-
-or, including a full cleanup first:
-
-```commandline
-task full-dev-localstack ; 
 ```
 
 This starts a LocalStack container, waits for the S3 service to become available, then runs `terraform init`/`terraform apply` against `main.tf` to create the `terraform-localstack-demo` bucket, uploads a test file, and opens it in the browser.
