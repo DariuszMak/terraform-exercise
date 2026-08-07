@@ -25,6 +25,10 @@ tasks:
     cmds:
       - powershell -ExecutionPolicy Bypass -File tasks/generate_diagrams.ps1
 
+  localstack-terraform:
+    desc: Start LocalStack and apply the Terraform S3 demo
+    cmds:
+      - powershell -ExecutionPolicy Bypass -File tasks/localstack_terraform.ps1
 
   full-dev-native:
     desc: Fast native Windows development flow
@@ -34,3 +38,10 @@ tasks:
       - task: dev-env
       - task: local-static-tests
       - powershell -ExecutionPolicy Bypass -File tasks/run_native_dev_application.ps1
+
+  full-dev-localstack:
+    desc: Full cleanup plus LocalStack and Terraform provisioning
+    deps:
+      - cleanup
+    cmds:
+      - task: localstack-terraform

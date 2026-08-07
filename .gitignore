@@ -156,3 +156,12 @@ files_rc.py
 
 # SQLite
 *.sqlite
+
+#Terraform
+.terraform
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+crash.log
+crash.*.log
+test.txt
