@@ -15,7 +15,7 @@ def test_run_uploads_file_when_bucket_exists(
     tmp_path: pytest.TempPathFactory,
 ) -> None:
     monkeypatch.chdir(tmp_path)
-    monkeypatch.setattr(main, "load_dev_env", lambda: {})
+    monkeypatch.setattr(main, "load_dev_env", dict)
     monkeypatch.setattr(main.S3Client, "from_env", classmethod(lambda cls: s3_client))
 
     main.run()
@@ -30,7 +30,7 @@ def test_run_skips_upload_when_bucket_missing(
 ) -> None:
     from moto import mock_aws
 
-    monkeypatch.setattr(main, "load_dev_env", lambda: {})
+    monkeypatch.setattr(main, "load_dev_env", dict)
 
     with mock_aws():
         client = S3Client(s3_settings)  # type: ignore[arg-type]
