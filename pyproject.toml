@@ -20,6 +20,7 @@ dev = [
     "pydeps>=3.0.6",
     "import-linter>=2.13",
     "moto[s3]>=5.0.13",
+    "boto3-stubs>=1.43.67",
 ]
 
 [tool.mypy]
