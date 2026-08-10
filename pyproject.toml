@@ -5,7 +5,7 @@ description = "Simple template project for Python Application"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
-
+    "boto3>=1.35.0",
 ]
 
 [dependency-groups]
@@ -19,6 +19,7 @@ dev = [
     "semgrep>=1.90.0",
     "pydeps>=3.0.6",
     "import-linter>=2.13",
+    "moto[s3]>=5.0.13",
 ]
 
 [tool.mypy]
