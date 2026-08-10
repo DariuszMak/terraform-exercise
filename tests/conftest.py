@@ -29,13 +29,23 @@ def s3_settings() -> S3Settings:
 @pytest.fixture()
 def s3_client(s3_settings: S3Settings) -> Iterator[S3Client]:
     with mock_aws():
-        boto3.client(
+        raw_client = boto3.client(
             "s3",
             region_name=s3_settings.region_name,
             aws_access_key_id=s3_settings.access_key_id,
             aws_secret_access_key=s3_settings.secret_access_key,
-        ).create_bucket(
-            Bucket=s3_settings.bucket_name,
-            CreateBucketConfiguration={"LocationConstraint": s3_settings.region_name},
         )
+        try:
+            raw_client.create_bucket(
+                Bucket=s3_settings.bucket_name,
+                CreateBucketConfiguration={"LocationConstraint": s3_settings.region_name},
+            )
+        except raw_client.exceptions.BucketAlreadyOwnedByYou:
+            pass
+
         yield S3Client(s3_settings)
+
+        objects = raw_client.list_objects_v2(Bucket=s3_settings.bucket_name).get("Contents", [])
+        for obj in objects:
+            raw_client.delete_object(Bucket=s3_settings.bucket_name, Key=obj["Key"])
+        raw_client.delete_bucket(Bucket=s3_settings.bucket_name)

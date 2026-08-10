@@ -2,14 +2,13 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+import pytest
 from moto import mock_aws
 
 from src.s3_client import S3Client, S3Settings
 
 if TYPE_CHECKING:
     from pathlib import Path
-
-    import pytest
 
 
 def test_from_env_uses_defaults(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -51,9 +50,16 @@ def test_bucket_exists_true(s3_client: S3Client) -> None:
     assert s3_client.bucket_exists() is True
 
 
-def test_bucket_exists_false(s3_settings: S3Settings) -> None:
+def test_bucket_exists_false() -> None:
     with mock_aws():
-        client = S3Client(s3_settings)
+        settings = S3Settings(
+            bucket_name="does-not-exist-bucket",
+            endpoint_url="",
+            region_name="eu-west-1",
+            access_key_id="test",
+            secret_access_key="test",
+        )
+        client = S3Client(settings)
         assert client.bucket_exists() is False
 
 
