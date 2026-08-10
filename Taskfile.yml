@@ -36,12 +36,6 @@ tasks:
       - cleanup
     cmds:
       - task: dev-env
+      - task: localstack-terraform
       - task: local-static-tests
       - powershell -ExecutionPolicy Bypass -File tasks/run_native_dev_application.ps1
-
-  full-dev-localstack:
-    desc: Full cleanup plus LocalStack and Terraform provisioning
-    deps:
-      - cleanup
-    cmds:
-      - task: localstack-terraform
