@@ -22,12 +22,6 @@
 - [Terraform](https://developer.hashicorp.com/terraform/install)
 - [AWS CLI](https://aws.amazon.com/cli/)
 
-### LocalStack + Terraform S3 demo
-
-```commandline
-task full-dev-localstack ; 
-```
-
 ### Fast Windows dev
 
 ```commandline
