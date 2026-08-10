@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import contextlib
 from typing import TYPE_CHECKING
 
 import boto3
@@ -35,13 +36,11 @@ def s3_client(s3_settings: S3Settings) -> Iterator[S3Client]:
             aws_access_key_id=s3_settings.access_key_id,
             aws_secret_access_key=s3_settings.secret_access_key,
         )
-        try:
+        with contextlib.suppress(raw_client.exceptions.BucketAlreadyOwnedByYou):
             raw_client.create_bucket(
                 Bucket=s3_settings.bucket_name,
                 CreateBucketConfiguration={"LocationConstraint": s3_settings.region_name},
             )
-        except raw_client.exceptions.BucketAlreadyOwnedByYou:
-            pass
 
         yield S3Client(s3_settings)
 

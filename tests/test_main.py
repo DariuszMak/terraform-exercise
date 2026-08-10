@@ -1,12 +1,16 @@
 from __future__ import annotations
 
-from pathlib import Path
+from typing import TYPE_CHECKING
 
-import pytest
 from moto import mock_aws
 
 from src import main
 from src.s3_client import S3Client, S3Settings
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    import pytest
 
 
 def test_run_uploads_file_when_bucket_exists(
@@ -15,7 +19,7 @@ def test_run_uploads_file_when_bucket_exists(
     tmp_path: Path,
 ) -> None:
     monkeypatch.chdir(tmp_path)
-    monkeypatch.setattr(main, "load_dev_env", lambda: {})
+    monkeypatch.setattr(main, "load_dev_env", dict)
     monkeypatch.setattr(main.S3Client, "from_env", classmethod(lambda cls: s3_client))
 
     main.run()
@@ -27,7 +31,7 @@ def test_run_skips_upload_when_bucket_missing(
     monkeypatch: pytest.MonkeyPatch,
     caplog: pytest.LogCaptureFixture,
 ) -> None:
-    monkeypatch.setattr(main, "load_dev_env", lambda: {})
+    monkeypatch.setattr(main, "load_dev_env", dict)
 
     with mock_aws():
         settings = S3Settings(

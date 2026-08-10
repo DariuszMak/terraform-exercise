@@ -2,13 +2,14 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-import pytest
 from moto import mock_aws
 
 from src.s3_client import S3Client, S3Settings
 
 if TYPE_CHECKING:
     from pathlib import Path
+
+    import pytest
 
 
 def test_from_env_uses_defaults(monkeypatch: pytest.MonkeyPatch) -> None:
