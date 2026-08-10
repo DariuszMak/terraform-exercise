@@ -28,6 +28,10 @@ python_version = "3.14"
 warn_return_any = true
 warn_unused_configs = true
 
+[[tool.mypy.overrides]]
+module = ["boto3.*", "botocore.*"]
+ignore_missing_imports = true
+
 [tool.ruff]
 # Exclude a variety of commonly ignored directories.
 preview = true
@@ -195,7 +199,7 @@ max-complexity = 15
 "__init__.py" = ["F401"]
 # S311: (Standard pseudo-random generators are not suitable for cryptographic purposes)
 # ARG001: unused args common for e.g. test fixtures
-"tests/*" = ["S311", "ARG001", "ANN"]
+"tests/*" = ["S311", "ARG001", "ANN", "S105", "S106"]
 
 [tool.ruff.format]
 # Like Black, use double quotes for strings.

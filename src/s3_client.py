@@ -74,8 +74,7 @@ class S3Client:
         paginator = self._client.get_paginator("list_objects_v2")
         keys: list[str] = []
         for page in paginator.paginate(Bucket=self.bucket_name, Prefix=prefix):
-            for obj in page.get("Contents", []):
-                keys.append(obj["Key"])
+            keys.extend(obj["Key"] for obj in page.get("Contents", []))
         logger.info("Listed %d object(s) in s3://%s", len(keys), self.bucket_name)
         return keys
 

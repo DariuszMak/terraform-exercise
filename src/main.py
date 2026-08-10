@@ -2,7 +2,7 @@ import logging
 from pathlib import Path
 
 from src.env_loader import load_dev_env
-from src.s3_client import S3Client
+from src.s3_client import S3Client as S3Client
 
 logger = logging.getLogger(__name__)
 

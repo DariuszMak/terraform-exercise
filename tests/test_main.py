@@ -20,7 +20,7 @@ def test_run_uploads_file_when_bucket_exists(
 ) -> None:
     monkeypatch.chdir(tmp_path)
     monkeypatch.setattr(main, "load_dev_env", dict)
-    monkeypatch.setattr(main.S3Client, "from_env", classmethod(lambda cls: s3_client))
+    monkeypatch.setattr(main.S3Client, "from_env", classmethod(lambda _cls: s3_client))
 
     main.run()
 
@@ -42,7 +42,7 @@ def test_run_skips_upload_when_bucket_missing(
             secret_access_key="test",
         )
         client = S3Client(settings)
-        monkeypatch.setattr(main.S3Client, "from_env", classmethod(lambda cls: client))
+        monkeypatch.setattr(main.S3Client, "from_env", classmethod(lambda _cls: client))
 
         with caplog.at_level("ERROR"):
             main.run()
