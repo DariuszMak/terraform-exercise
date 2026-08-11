@@ -28,6 +28,15 @@ provider "aws" {
 resource "aws_s3_bucket" "demo" {
   bucket        = "terraform-localstack-demo"
   force_destroy = true
+
+  lifecycle_rule {
+    id      = "archive-old-versions"
+    enabled = true
+
+    noncurrent_version_expiration {
+      days = 30
+    }
+  }
 }
 
 resource "aws_s3_bucket_versioning" "demo" {
@@ -53,19 +62,4 @@ resource "aws_s3_bucket_public_access_block" "demo" {
   block_public_policy     = true
   ignore_public_acls      = true
   restrict_public_buckets = true
-}
-
-resource "aws_s3_bucket_lifecycle_configuration" "demo" {
-  bucket = aws_s3_bucket.demo.id
-
-  rule {
-    id     = "archive-old-versions"
-    status = "Enabled"
-
-    filter {}
-
-    noncurrent_version_expiration {
-      noncurrent_days = 30
-    }
-  }
 }
