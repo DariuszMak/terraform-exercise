@@ -44,7 +44,17 @@ def s3_client(s3_settings: S3Settings) -> Iterator[S3Client]:
 
         yield S3Client(s3_settings)
 
-        objects = raw_client.list_objects_v2(Bucket=s3_settings.bucket_name).get("Contents", [])
-        for obj in objects:
-            raw_client.delete_object(Bucket=s3_settings.bucket_name, Key=obj["Key"])
+        versions = raw_client.list_object_versions(Bucket=s3_settings.bucket_name)
+        for version in versions.get("Versions", []):
+            raw_client.delete_object(
+                Bucket=s3_settings.bucket_name,
+                Key=version["Key"],
+                VersionId=version["VersionId"],
+            )
+        for marker in versions.get("DeleteMarkers", []):
+            raw_client.delete_object(
+                Bucket=s3_settings.bucket_name,
+                Key=marker["Key"],
+                VersionId=marker["VersionId"],
+            )
         raw_client.delete_bucket(Bucket=s3_settings.bucket_name)
