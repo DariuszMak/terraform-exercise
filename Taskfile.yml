@@ -38,3 +38,13 @@ tasks:
       - task: dev-env
       - task: localstack-terraform
       - task: local-static-tests
+
+
+  local-dev-native-run:
+    desc: Local dev Windows run
+    deps:
+      - cleanup
+    cmds:
+      - task: dev-env
+      - task: localstack-terraform
+      - powershell -ExecutionPolicy Bypass -File tasks/run_native_dev_application.ps1
