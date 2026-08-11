@@ -3,7 +3,6 @@ uv run ruff check --fix src tests
 uv run ruff check --fix --unsafe-fixes src tests
 uv run ruff check --fix --select I src tests
 
-
 uv run pip-audit
 uv run ruff check src tests
 uv run ruff format --check src tests
