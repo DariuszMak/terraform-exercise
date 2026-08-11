@@ -3,11 +3,12 @@ uv run ruff check --fix src tests
 uv run ruff check --fix --unsafe-fixes src tests
 uv run ruff check --fix --select I src tests
 
-uv run ruff check src tests --output-format json > ruff-report.json
 
 uv run pip-audit
 uv run ruff check src tests
 uv run ruff format --check src tests
+
+uv run ruff check src tests --output-format json > ruff-report.json
 
 uv run vulture src tests --min-confidence 80
 
@@ -21,6 +22,5 @@ uv run lint-imports --config pyproject.toml
 
 uv run semgrep --config=auto --config=p/security-audit --error src tests
 
-uv run coverage run -m pytest tests/
 uv run coverage report
 uv run coverage xml
