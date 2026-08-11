@@ -24,7 +24,10 @@ def test_run_uploads_file_when_bucket_exists(
 
     main.run()
 
-    assert s3_client.list_objects() == ["test.txt"]
+    objects = s3_client.list_objects()
+    assert "test.txt" in objects
+    assert "batch/test_batch.txt" in objects
+    assert "backups/test_backup.txt" in objects
 
 
 def test_run_skips_upload_when_bucket_missing(

@@ -50,7 +50,6 @@ def test_missing_file_returns_empty() -> None:
 
 
 def test_dev_env_file_loads_example_variable() -> None:
-    """Integration test: loads the actual .dev.env from the project root."""
     os.environ.pop("EXAMPLE_VARIABLE_NAME", None)
     load_dev_env(".dev.env")
     assert os.getenv("EXAMPLE_VARIABLE_NAME") == "Hello_World"

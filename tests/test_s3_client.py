@@ -68,8 +68,9 @@ def test_upload_and_list_objects(s3_client: S3Client, tmp_path: Path) -> None:
     local_file = tmp_path / "hello.txt"
     local_file.write_text("hello", encoding="utf-8")
 
-    s3_client.upload_file(local_file, "hello.txt")
+    checksum = s3_client.upload_file(local_file, "hello.txt")
 
+    assert checksum is not None
     assert s3_client.list_objects() == ["hello.txt"]
     assert s3_client.object_exists("hello.txt") is True
 
@@ -109,3 +110,45 @@ def test_list_objects_with_prefix(s3_client: S3Client, tmp_path: Path) -> None:
     s3_client.upload_file(file_b, "other/b.txt")
 
     assert s3_client.list_objects(prefix="prefix/") == ["prefix/a.txt"]
+
+
+def test_get_object_metadata_and_checksum(s3_client: S3Client, tmp_path: Path) -> None:
+    file_a = tmp_path / "meta.txt"
+    file_a.write_text("metadata test", encoding="utf-8")
+
+    checksum = s3_client.upload_file(file_a, "meta.txt", metadata={"owner": "unit-test"})
+    meta = s3_client.get_object_metadata("meta.txt")
+
+    assert meta.get("sha256") == checksum
+    assert meta.get("owner") == "unit-test"
+
+
+def test_upload_batch(s3_client: S3Client, tmp_path: Path) -> None:
+    file_1 = tmp_path / "f1.txt"
+    file_1.write_text("content 1", encoding="utf-8")
+    file_2 = tmp_path / "f2.txt"
+    file_2.write_text("content 2", encoding="utf-8")
+
+    batch = [(file_1, "batch/f1.txt"), (file_2, "batch/f2.txt")]
+    hashes = s3_client.upload_batch(batch)
+
+    assert len(hashes) == 2
+    assert sorted(s3_client.list_objects(prefix="batch/")) == ["batch/f1.txt", "batch/f2.txt"]
+
+
+def test_generate_presigned_url(s3_client: S3Client, tmp_path: Path) -> None:
+    file_a = tmp_path / "presigned.txt"
+    file_a.write_text("url test", encoding="utf-8")
+    s3_client.upload_file(file_a, "presigned.txt")
+
+    url = s3_client.generate_presigned_url("presigned.txt")
+    assert "presigned.txt" in url
+
+
+def test_copy_object(s3_client: S3Client, tmp_path: Path) -> None:
+    file_a = tmp_path / "source.txt"
+    file_a.write_text("copy source", encoding="utf-8")
+    s3_client.upload_file(file_a, "source.txt")
+
+    s3_client.copy_object("source.txt", "copied.txt")
+    assert s3_client.object_exists("copied.txt") is True
