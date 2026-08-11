@@ -104,8 +104,8 @@ class S3Client:
                     file_hash = future.result()
                     results.append(file_hash)
                     logger.info("Batch upload succeeded for key: %s", key)
-                except Exception as exc:
-                    logger.exception("Batch upload failed for key %s: %s", key, exc)
+                except Exception:
+                    logger.exception("Batch upload failed for key %s", key)
                     raise
         return results
 
@@ -121,7 +121,7 @@ class S3Client:
         logger.info("Listed %d object(s) in s3://%s", len(keys), self.bucket_name)
         return keys
 
-    def get_object_metadata(self, key: str) -> dict[str, Any]:
+    def get_object_metadata(self, key: str) -> Any:
         logger.info("Fetching metadata for s3://%s/%s", self.bucket_name, key)
         response = self._client.head_object(Bucket=self.bucket_name, Key=key)
         return response.get("Metadata", {})
