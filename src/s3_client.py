@@ -97,10 +97,7 @@ class S3Client:
     def upload_batch(self, file_key_pairs: list[tuple[Path, str]], max_workers: int = 4) -> list[str]:
         results: list[str] = []
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
-            futures = {
-                executor.submit(self.upload_file, path, key): key
-                for path, key in file_key_pairs
-            }
+            futures = {executor.submit(self.upload_file, path, key): key for path, key in file_key_pairs}
             for future in as_completed(futures):
                 key = futures[future]
                 try:
@@ -108,7 +105,7 @@ class S3Client:
                     results.append(file_hash)
                     logger.info("Batch upload succeeded for key: %s", key)
                 except Exception as exc:
-                    logger.error("Batch upload failed for key %s: %s", key, exc)
+                    logger.exception("Batch upload failed for key %s: %s", key, exc)
                     raise
         return results
 
