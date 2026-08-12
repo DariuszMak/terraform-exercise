@@ -39,7 +39,6 @@ tasks:
       - task: localstack-terraform
       - task: local-static-tests
 
-
   local-dev-native-run:
     desc: Local dev Windows run
     deps:
