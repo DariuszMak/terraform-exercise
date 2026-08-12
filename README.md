@@ -2,13 +2,7 @@
 
 ### Project structure diagrams
 
-##### Modular perspective
-
-<p align="center">
-  <img src="images/structure_module.svg" alt="Modular perspective" width="600">
-</p>
-
-### Structurizr diagrams
+##### Structurizr diagrams
 
 <table align="center">
     <tr>
@@ -25,6 +19,12 @@
         <img src="images/Structurizr/DevelopmentWorkflow-dark.svg" width="600px">
     </td>
 </table>
+
+##### Modular perspective
+
+<p align="center">
+  <img src="images/structure_module.svg" alt="Modular perspective" width="600">
+</p>
 
 ##### Library dependencies perspective
 
