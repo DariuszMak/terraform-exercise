@@ -8,6 +8,24 @@
   <img src="images/structure_module.svg" alt="Modular perspective" width="600">
 </p>
 
+### Structurizr diagrams
+
+<table align="center">
+    <tr>
+        <td align="center">
+            <img src="images/Structurizr/SystemLandscape-dark.svg" width="1200px">
+        </td>
+    </tr>
+    <tr>
+    <td align="center">
+        <img src="images/Structurizr/Components-dark.svg" width="600px">
+    </td>
+    <td></td>
+    <td align="center">
+        <img src="images/Structurizr/DevelopmentWorkflow-dark.svg" width="600px">
+    </td>
+</table>
+
 ##### Library dependencies perspective
 
 <p align="center">
